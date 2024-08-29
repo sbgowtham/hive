@@ -33,6 +33,6 @@ insert into patient_nopart values (5,'e','avil','female',100,'IND');
 
 
 insert into patient_dynamic_partition  
-partition(country)  
+partition(drug)  
 select pid, pname, drug, gender, tot_amt  , country
 from patient_nopart;  
