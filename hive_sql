@@ -14,7 +14,7 @@ LOAD DATA LOCAL INPATH '/home/hadoop/data.txt' INTO TABLE patient_part PARTITION
 
 Dynamic Partition 
 
-create table patient_dynamic_partition (pid INT, pname STRING, drug STRING,gender
+create table patient_dynamic_partition (pid INT, pname STRING,gender
 STRING,tot_amt INT)   
 partitioned by (drug string)  
 row format delimited  
