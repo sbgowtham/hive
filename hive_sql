@@ -5,3 +5,7 @@ load data local inpath '/home/hadoop/data.txt'  into table patient;
 load data  inpath '/foo.txt'  into table patient; 
 
 select drug,sum(tot_amt) from patient group by drug;
+
+
+Static Partition 
+create table patient_part (pid INT, pname STRING, drug STRING,gender string,tot_amt INT) partitioned by  (country STRING)row format delimited fields terminated by ',' stored as textfile;
