@@ -14,6 +14,25 @@ LOAD DATA LOCAL INPATH '/home/hadoop/data.txt' INTO TABLE patient_part PARTITION
 
 Dynamic Partition 
 
-create table patient_dy_part (pid INT, pname STRING, gender string,tot_amt INT) 
-partitioned by  (drug STRING)row format delimited fields 
-terminated by ',' stored as textfile;
+create table patient_dynamic_partition (pid INT, pname STRING, drug STRING,gender
+STRING,tot_amt INT)   
+partitioned by (drug string)  
+row format delimited  
+fields terminated by ',';  
+
+
+create table patient_nopart(pid INT, pname STRING, drug STRING,gender STRING, 
+tot_amt INT,country STRING) row format delimited fields terminated by ',' stored as textfile;
+
+insert into patient_nopart values (1,'a','avil','male',100,'IND');
+insert into patient_nopart values (2,'b','para','male',100,'USA');
+insert into patient_nopart values (3,'c','avil','female',100,'IND');
+insert into patient_nopart values (4,'d','meta','male',100,'USA');
+insert into patient_nopart values (5,'e','avil','female',100,'IND');
+
+
+
+insert into patient_dynamic_partition  
+partition(country)  
+select pid, pname, drug, gender, tot_amt  , country
+from patient_nopart;  
