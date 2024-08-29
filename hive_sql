@@ -39,3 +39,14 @@ insert into patient_dynamic_partition
 partition(drug)  
 select pid, pname, gender, tot_amt  , drug
 from patient_nopart;  
+
+
+
+BUCKET
+
+CREATE TABLE bucketed_patient (pid INT, pname STRING, drug STRING,genter 
+STRING, tot_amt INT) CLUSTERED BY (pid) INTO 4 BUCKETS; 
+
+hive.enforce.bucketing = true; 
+
+INSERT OVERWRITE TABLE bucketed_patient select pid, pname, drug, gender, tot_amt  from patient_nopart;; 
