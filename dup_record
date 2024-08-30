@@ -38,3 +38,12 @@ large_df = pd.DataFrame(records)
 large_df.to_csv("large_dataset.csv", index=False)
 
 print("Generated large dataset with 3 million records.")
+
+
+
+set mysql password
+
+sudo mysql -u root
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
