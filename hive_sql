@@ -59,3 +59,12 @@ row format delimited fields terminated by ',' stored as textfile LOCATION '/pati
 
 LOAD DATA INPATH '/data10.txt' INTO table patient_external; 
 
+
+
+
+set mysql password
+
+sudo mysql -u root
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
