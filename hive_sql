@@ -54,7 +54,8 @@ INSERT OVERWRITE TABLE bucketed_patient select pid, pname, drug, gender, tot_amt
 
 External Table 
 
-create EXTERNAL table patient_external(pid INT, pname STRING, drug STRING,gender STRING,tot_amt INT) row format delimited fields terminated by ',' stored as textfile LOCATION '/patient_external'; 
+create EXTERNAL table patient_external(pid INT, pname STRING, drug STRING,gender STRING,tot_amt INT)
+row format delimited fields terminated by ',' stored as textfile LOCATION '/patient_external'; 
 
 LOAD DATA INPATH '/data10.txt' INTO table patient_external; 
 
