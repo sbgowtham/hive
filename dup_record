@@ -1,0 +1,40 @@
+import random
+import pandas as pd
+
+# Original data
+data = [
+    {"name": "Brandon Buckner", "drug": "avil", "gender": "female", "dose": 525},
+    {"name": "Veda Hopkins", "drug": "avil", "gender": "male", "dose": 633},
+    {"name": "Zia Underwood", "drug": "paracetamol", "gender": "male", "dose": 980},
+    {"name": "Austin Mayer", "drug": "paracetamol", "gender": "female", "dose": 338},
+    {"name": "Mara Higgins", "drug": "avil", "gender": "female", "dose": 153},
+    {"name": "Sybill Crosby", "drug": "avil", "gender": "male", "dose": 193},
+    {"name": "Tyler Rosales", "drug": "paracetamol", "gender": "male", "dose": 778},
+    {"name": "Ivan Hale", "drug": "avil", "gender": "female", "dose": 454},
+    {"name": "Alika Gilmore", "drug": "paracetamol", "gender": "female", "dose": 833},
+    {"name": "Len Burgess", "drug": "metacin", "gender": "male", "dose": 325},
+]
+
+# Convert the original data to a pandas DataFrame
+df = pd.DataFrame(data)
+
+# Function to slightly modify data for variation
+def modify_row(row):
+    # Adjust dose slightly by a random amount between -10 and 10
+    row["dose"] = row["dose"] + random.randint(-10, 10)
+    return row
+
+# Duplicate the data to get 3 million records
+records = []
+for _ in range(300000):  # 300000 x 10 = 3000000
+    for _, row in df.iterrows():
+        modified_row = modify_row(row)
+        records.append(modified_row)
+
+# Convert to DataFrame
+large_df = pd.DataFrame(records)
+
+# Save to CSV (optional)
+large_df.to_csv("large_dataset.csv", index=False)
+
+print("Generated large dataset with 3 million records.")
