@@ -1,9 +1,14 @@
+-- create table 
+
 create table patient(pid INT, pname STRING, drug STRING,gender STRING, 
-tot_amt INT) row format delimited fields terminated by ',' stored as textfile; 
+tot_amt INT) row format delimited fields terminated by ',' stored as textile; 
+
+--load data 
 
 load data local inpath '/home/hadoop/data.txt'  into table patient; 
 load data  inpath '/foo.txt'  into table patient; 
 
+--select 
 select drug,sum(tot_amt) from patient group by drug;
 
 
@@ -42,7 +47,7 @@ from patient_nopart;
 
 
 
-BUCKET
+==BUCKET
 
 CREATE TABLE bucketed_patient (pid INT, pname STRING, drug STRING,genter 
 STRING, tot_amt INT) CLUSTERED BY (pid) INTO 4 BUCKETS; 
@@ -52,19 +57,157 @@ hive.enforce.bucketing = true;
 INSERT OVERWRITE TABLE bucketed_patient select pid, pname, drug, gender, tot_amt  from patient_nopart;
 
 
+==Internal vs External Table
+
+Internal Table 
+
+create table patient(pid INT, pname STRING, drug STRING,gender STRING, 
+tot_amt INT) row format delimited fields terminated by ',' stored as textfile;
+
+show tables;
+
+load data inpath '/data10.txt' into table patient;
+
+load data local inpath '/home/ubuntu/datagen_10.txt' into table patient;
+
+select * from patient;
+
+desc patient;
+
+desc extended patient;
+
+drop table patient;
+
+#### Now Check the HDFS Path of Hive Table 
+
+
+
 External Table 
 
-create EXTERNAL table patient_external(pid INT, pname STRING, drug STRING,gender STRING,tot_amt INT)
-row format delimited fields terminated by ',' stored as textfile LOCATION '/patient_external'; 
+create EXTERNAL table patient_external(pid INT, pname STRING, drug 
+STRING,gender STRING,tot_amt INT) row format delimited fields terminated by 
+',' stored as textfile LOCATION '/patient_external';
 
-LOAD DATA INPATH '/data10.txt' INTO table patient_external; 
+load data local inpath '/home/psgr/datagen_10.txt' into table patient_external;
+
+drop table patient_external;
+
+#### Now Check the HDFS Path of Hive Table 
+
+
+==JOIN
+
+Table 1 
+
+CREATE TABLE employees (
+    employee_id INT,
+    name STRING,
+    department_id INT
+);
+
+INSERT INTO employees VALUES (1, 'Alice', 101);
+INSERT INTO employees VALUES (2, 'Bob', 102);
+INSERT INTO employees VALUES (3, 'Charlie', 103);
+INSERT INTO employees VALUES (4, 'David', NULL);  -- No department assigned
+
+
+Table 2 
+
+Departments Table
+ 
+CREATE TABLE departments (
+    department_id INT,
+    department_name STRING
+);
+
+INSERT INTO departments VALUES (101, 'HR');
+INSERT INTO departments VALUES (102, 'Finance');
+INSERT INTO departments VALUES (103, 'IT');
+INSERT INTO departments VALUES (104, 'Marketing');
+
+==Left 
+SELECT 
+    e.employee_id,
+    e.name,
+    d.department_id,
+    d.department_name
+FROM 
+    employees e 
+LEFT JOIN 
+    departments d 
+ON 
+    e.department_id = d.department_id;
+
+==Full Outer Join
+
+SELECT 
+    e.employee_id,
+    e.name,
+    d.department_id,
+    d.department_name
+FROM 
+    employees e 
+FULL OUTER JOIN 
+    departments d 
+ON 
+    e.department_id = d.department_id;
+
+
+==Right Join
+
+SELECT 
+    e.employee_id,
+    e.name,
+    d.department_id,
+    d.department_name
+FROM 
+    employees e 
+RIGHT OUTER JOIN 
+    departments d 
+ON 
+    e.department_id = d.department_id;
 
 
 
+show functions;
 
-set mysql password
 
-sudo mysql -u root
+==Agg Functions
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
+select min(tot_amt) from patient;
+select upper (pname) from patient;
+
+
+== ORC VS RC
+
+Text File Format 
+
+create table table1(pid INT, pname STRING, drug STRING,gender STRING,tot_amt INT) row format delimited fields terminated by ',' stored as textfile;
+
+load data local inpath '/home/ubuntu/<file>.txt' into table table1;
+
+load data local inpath '/home/ubuntu/<file>.txt' into table table1;
+
+show create table table1;
+
+
+
+ORC File Format
+
+create table table2(pid INT, pname STRING, drug STRING,gender STRING,tot_amt INT)row format delimited fields terminated by ',' STORED AS orc ;
+
+insert overwrite table table2 select * from table1;
+
+show create table table2;
+
+
+
+Now run the below command and check for the time difference 
+
+select count(*) from table1 where tot_amt =110;
+
+select count(*) from table2 where tot_amt =110;
+
+
 
